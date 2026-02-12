@@ -1,12 +1,12 @@
 <div class="w-full max-w-md mx-auto mb-5 sm:pt-10">
-  <a routerLink="/"
+  <!--   <a routerLink="/"
     class="inline-flex items-center text-sm text-gray-500 transition-colors hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">
     <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 20 20" fill="none" class="size-5">
       <path d="M12.7083 5L7.5 10.2083L12.7083 15.4167" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
         stroke-linejoin="round"></path>
     </svg>
     Back to dashboard
-  </a>
+  </a> -->
 </div>
 
 <div class="flex flex-col justify-center flex-1 w-full max-w-md mx-auto">
@@ -63,7 +63,7 @@
       </div>
     </div>
 
-    <form>
+    <form [formGroup]="signUpForm" (ngSubmit)="onSignUp()">
       <div class="space-y-5">
         <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
           <!-- First Name -->
@@ -71,14 +71,16 @@
             <app-label>
               First Name<span class="text-error-500">*</span>
             </app-label>
-            <app-input-field type="text" [value]="fname" id="fname" name="fname" placeholder="Enter your first name" />
+            <input formControlName="firstName" type="text" id="fname" name="fname" placeholder="Enter your first name"
+              class="form-input h-11 w-full rounded-lg border px-4 py-2.5 text-sm" />
           </div>
           <!-- Last Name -->
           <div class="sm:col-span-1">
             <app-label>
               Last Name<span class="text-error-500">*</span>
             </app-label>
-            <app-input-field type="text" [value]="lname" id="lname" name="lname" placeholder="Enter your last name" />
+            <input formControlName="lastName" type="text" id="lname" name="lname" placeholder="Enter your last name"
+              class="form-input h-11 w-full rounded-lg border px-4 py-2.5 text-sm" />
           </div>
         </div>
         <!-- Email -->
@@ -86,15 +88,18 @@
           <app-label>
             Email <span class="text-error-500">*</span>
           </app-label>
-          <app-input-field type="email" [value]="email" id="email" name="email" placeholder="Enter your email" />
+          <input formControlName="email" type="email" id="email" name="email" placeholder="Enter your email"
+            class="form-input h-11 w-full rounded-lg border px-4 py-2.5 text-sm" />
         </div>
         <!-- Password -->
         <div>
           <app-label>Password <span class="text-error-500">*</span></app-label>
           <div class="relative">
-            <app-input-field [type]="showPassword ? 'text' : 'password'" placeholder="Enter your password"
-              [value]="password" name="password" class="form-input" required />
-            <span (click)="togglePasswordVisibility()" class="absolute z-30 -translate-y-1/2 cursor-pointer right-4 top-1/2">
+            <input formControlName="password" [type]="showPassword ? 'text' : 'password'"
+              placeholder="Enter your password" name="password"
+              class="form-input h-11 w-full rounded-lg border px-4 py-2.5 text-sm" required />
+            <span (click)="togglePasswordVisibility()"
+              class="absolute z-30 -translate-y-1/2 cursor-pointer right-4 top-1/2">
               @if (showPassword) {
               <svg width="1em" height="1em" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"
                 class="fill-gray-500 dark:fill-gray-400 size-5">

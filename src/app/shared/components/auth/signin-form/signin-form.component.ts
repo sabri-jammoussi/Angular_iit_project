@@ -1,8 +1,13 @@
-import { HttpClient, HttpClientModule } from "@angular/common/http";
+import { HttpClientModule } from "@angular/common/http";
 import { Component } from "@angular/core";
-import { FormsModule } from "@angular/forms";
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from "@angular/forms";
 import { Router, RouterModule } from "@angular/router";
-import { Observable } from "rxjs";
+import { AuthService } from "../../../services/auth/auth.service";
 import { CheckboxComponent } from "../../form/input/checkbox.component";
 import { InputFieldComponent } from "../../form/input/input-field.component";
 import { LabelComponent } from "../../form/label/label.component";
@@ -16,7 +21,7 @@ import { ButtonComponent } from "../../ui/button/button.component";
     ButtonComponent,
     InputFieldComponent,
     RouterModule,
-    FormsModule,
+    ReactiveFormsModule,
     HttpClientModule,
   ],
   templateUrl: "./signin-form.component.html",
@@ -24,32 +29,31 @@ import { ButtonComponent } from "../../ui/button/button.component";
 })
 export class SigninFormComponent {
   showPassword = false;
-  isChecked = false;
-
-  email = "";
-  password = "";
+  signInForm!: FormGroup;
 
   constructor(
-    private http: HttpClient,
+    private authService: AuthService,
     private router: Router,
-  ) {}
+    private fb: FormBuilder,
+  ) {
+    this.signInForm = this.fb.group({
+      email: ["", [Validators.required, Validators.email]],
+      password: ["", [Validators.required]],
+      remember: [false],
+    });
+  }
 
   togglePasswordVisibility() {
     this.showPassword = !this.showPassword;
   }
 
-  private login(): Observable<any> {
-    const url = "/api/Auth/login";
-    const body = { email: this.email, password: this.password };
-    return this.http.post<any>(url, body);
-  }
-
   onSignIn() {
-    console.log("Email:", this.email);
-    console.log("Password:", this.password);
-    console.log("Remember Me:", this.isChecked);
+    const { email, password, remember } = this.signInForm.value;
+    console.log("Email:", email);
+    console.log("Password:", password);
+    console.log("Remember Me:", remember);
 
-    this.login().subscribe({
+    this.authService.login(this.signInForm.value).subscribe({
       next: (res) => {
         const token =
           res?.token ?? res?.accessToken ?? res?.data?.token ?? null;

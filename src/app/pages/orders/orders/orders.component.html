@@ -1,0 +1,89 @@
+<app-page-breadcrumb pageTitle="Orders" />
+<div class="space-y-6">
+    <div>
+        <app-component-card title="Orders List">
+
+            @if (loading) {
+            <div class="px-5 py-8 text-center text-gray-500 dark:text-gray-400">Loading orders...</div>
+            } @else if (error) {
+            <div class="px-5 py-8 text-center text-red-500">{{ error }}</div>
+            } @else {
+
+            <div
+                class="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
+                <div class="max-w-full overflow-x-auto">
+                    <table class="min-w-full">
+                        <!-- Table Header -->
+                        <thead class="border-b border-gray-100 dark:border-white/[0.05]">
+                            <tr>
+                                <th
+                                    class="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
+                                    #</th>
+                                <th
+                                    class="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
+                                    Customer</th>
+                                <th
+                                    class="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
+                                    Date</th>
+                                <th
+                                    class="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
+                                    Status</th>
+                                <th
+                                    class="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
+                                    Shipping Address</th>
+                                <th
+                                    class="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
+                                    Products</th>
+                                <th
+                                    class="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
+                                    Total</th>
+                            </tr>
+                        </thead>
+                        <!-- Table Body -->
+                        <tbody class="divide-y divide-gray-100 dark:divide-white/[0.05]">
+                            @for (order of orders; track order.id) {
+                            <tr>
+                                <td class="px-5 py-4 text-gray-800 text-theme-sm dark:text-white/90">
+                                    {{ order.id }}
+                                </td>
+                                <td class="px-5 py-4 text-start">
+                                    <span class="block font-medium text-gray-800 text-theme-sm dark:text-white/90">
+                                        {{ order.customerName }}
+                                    </span>
+                                </td>
+                                <td class="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                                    {{ formatDate(order.orderDate) }}
+                                </td>
+                                <td class="px-4 py-3 text-start">
+                                    <app-badge size="sm" [color]="getBadgeColor(order.status)">
+                                        {{ order.status }}
+                                    </app-badge>
+                                </td>
+                                <td class="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                                    {{ order.shippingAddress }}
+                                </td>
+                                <td class="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                                    @for (detail of order.orderDetails; track detail.id) {
+                                    <div class="mb-1">
+                                        <span class="font-medium text-gray-700 dark:text-gray-300">{{ detail.productName
+                                            }}</span>
+                                        <span class="text-theme-xs"> x{{ detail.quantity }} — {{
+                                            formatCurrency(detail.lineTotal) }}</span>
+                                    </div>
+                                    }
+                                </td>
+                                <td class="px-4 py-3 font-medium text-gray-800 text-theme-sm dark:text-white/90">
+                                    {{ formatCurrency(order.totalAmount) }}
+                                </td>
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            }
+
+        </app-component-card>
+    </div>
+</div>
