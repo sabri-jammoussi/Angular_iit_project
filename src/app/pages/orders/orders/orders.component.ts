@@ -8,6 +8,7 @@ import {
   Order,
   OrderService,
 } from "../../../shared/services/order/order.service";
+import { OrderDetailsDialogComponent } from "../order-details-dialog/order-details-dialog.component";
 
 @Component({
   selector: "app-orders",
@@ -18,6 +19,7 @@ import {
     PageBreadcrumbComponent,
     ComponentCardComponent,
     BadgeComponent,
+    OrderDetailsDialogComponent,
   ],
   templateUrl: "./orders.component.html",
 })
@@ -25,6 +27,11 @@ export class OrdersComponent implements OnInit {
   orders: Order[] = [];
   loading = true;
   error = "";
+
+  // Dialog state
+  dialogOpen = false;
+  selectedOrderId: number | null = null;
+  selectedOrderDetails: any[] = [];
 
   constructor(private orderService: OrderService) {}
 
@@ -62,5 +69,17 @@ export class OrdersComponent implements OnInit {
       style: "currency",
       currency: "USD",
     });
+  }
+
+  openDetails(order: Order): void {
+    this.selectedOrderId = order.id;
+    this.selectedOrderDetails = order.orderDetails || [];
+    this.dialogOpen = true;
+  }
+
+  closeDetails(): void {
+    this.dialogOpen = false;
+    this.selectedOrderId = null;
+    this.selectedOrderDetails = [];
   }
 }

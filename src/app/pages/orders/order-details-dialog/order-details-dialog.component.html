@@ -1,0 +1,72 @@
+@if (open) {
+<!-- Backdrop -->
+<div class="fixed inset-0 z-[999] bg-black/50" (click)="close()"></div>
+
+<!-- Dialog -->
+<div class="fixed inset-0 z-[1000] flex items-center justify-center p-4">
+    <div class="w-full max-w-2xl rounded-xl bg-white shadow-xl dark:bg-gray-800" (click)="$event.stopPropagation()">
+        <!-- Header -->
+        <div class="flex items-center justify-between border-b border-gray-200 px-6 py-4 dark:border-gray-700">
+            <h3 class="text-lg font-semibold text-gray-800 dark:text-white">
+                Order #{{ orderId }} — Details
+            </h3>
+            <button (click)="close()" type="button"
+                class="rounded-full p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-700">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                </svg>
+            </button>
+        </div>
+
+        <!-- Body -->
+        <div class="px-6 py-4">
+            <form [formGroup]="detailsForm">
+                <div class="space-y-3 max-h-80 overflow-y-auto" formArrayName="items">
+                    @for (item of items.controls; track $index) {
+                    <div [formGroupName]="$index" class="rounded-lg border border-gray-200 p-4 dark:border-gray-700">
+                        <div class="grid grid-cols-2 gap-4 md:grid-cols-4">
+                            <!-- Product Name -->
+                            <div class="col-span-2">
+                                <label
+                                    class="mb-1 block text-xs font-medium text-gray-500 dark:text-gray-400">Product</label>
+                                <input formControlName="productName" readonly
+                                    class="w-full rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 text-sm text-gray-700 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200" />
+                            </div>
+                            <!-- Quantity -->
+                            <div>
+                                <label
+                                    class="mb-1 block text-xs font-medium text-gray-500 dark:text-gray-400">Quantity</label>
+                                <input formControlName="quantity" readonly
+                                    class="w-full rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 text-sm text-gray-700 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200" />
+                            </div>
+                            <!-- Unit Price -->
+                            <div>
+                                <label class="mb-1 block text-xs font-medium text-gray-500 dark:text-gray-400">Unit
+                                    Price</label>
+                                <input formControlName="unitPrice" readonly
+                                    class="w-full rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 text-sm text-gray-700 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200" />
+                            </div>
+                            <!-- Line Total -->
+                            <div class="col-span-2 md:col-span-4">
+                                <label class="mb-1 block text-xs font-medium text-gray-500 dark:text-gray-400">Line
+                                    Total</label>
+                                <input formControlName="lineTotal" readonly
+                                    class="w-full rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 text-sm font-semibold text-gray-800 dark:border-gray-600 dark:bg-gray-700 dark:text-white" />
+                            </div>
+                        </div>
+                    </div>
+                    }
+                </div>
+            </form>
+        </div>
+
+        <!-- Footer -->
+        <div class="flex justify-end border-t border-gray-200 px-6 py-4 dark:border-gray-700">
+            <button (click)="close()" type="button"
+                class="rounded-lg bg-gray-200 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-300 dark:bg-gray-600 dark:text-gray-200 dark:hover:bg-gray-500">
+                Close
+            </button>
+        </div>
+    </div>
+</div>
+}
