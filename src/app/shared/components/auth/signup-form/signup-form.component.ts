@@ -10,7 +10,6 @@ import { Router, RouterModule } from "@angular/router";
 import { AuthService } from "../../../services/auth/auth.service";
 import { ToastService } from "../../../services/toast.service";
 import { CheckboxComponent } from "../../form/input/checkbox.component";
-import { InputFieldComponent } from "../../form/input/input-field.component";
 import { LabelComponent } from "../../form/label/label.component";
 
 @Component({
@@ -18,7 +17,6 @@ import { LabelComponent } from "../../form/label/label.component";
   imports: [
     LabelComponent,
     CheckboxComponent,
-    InputFieldComponent,
     RouterModule,
     ReactiveFormsModule,
     HttpClientModule,

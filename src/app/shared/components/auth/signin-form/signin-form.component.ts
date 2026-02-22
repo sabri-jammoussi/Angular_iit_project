@@ -8,18 +8,12 @@ import {
 } from "@angular/forms";
 import { Router, RouterModule } from "@angular/router";
 import { AuthService } from "../../../services/auth/auth.service";
-import { CheckboxComponent } from "../../form/input/checkbox.component";
-import { InputFieldComponent } from "../../form/input/input-field.component";
 import { LabelComponent } from "../../form/label/label.component";
-import { ButtonComponent } from "../../ui/button/button.component";
 
 @Component({
   selector: "app-signin-form",
   imports: [
     LabelComponent,
-    CheckboxComponent,
-    ButtonComponent,
-    InputFieldComponent,
     RouterModule,
     ReactiveFormsModule,
     HttpClientModule,

@@ -1,6 +1,6 @@
 [build]
   command = "npm run build"
-  publish = "dist/ng-tailadmin"
+  publish = "dist/ng-tailadmin/browser"
 
 [[redirects]]
   from = "/*"
