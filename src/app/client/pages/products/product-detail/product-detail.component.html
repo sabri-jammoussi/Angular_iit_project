@@ -1,0 +1,102 @@
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Back link -->
+    <a routerLink="/shop/products"
+        class="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-brand-500 dark:text-gray-400 dark:hover:text-brand-400 mb-6 transition-colors">
+        <i class="fa-solid fa-arrow-left"></i> Back to Products
+    </a>
+
+    <!-- Loading -->
+    @if (loading) {
+    <div class="flex items-center justify-center py-20">
+        <i class="fa-solid fa-spinner fa-spin text-3xl text-brand-500"></i>
+    </div>
+    }
+
+    @if (!loading && product) {
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+        <!-- Image -->
+        <div
+            class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden aspect-square">
+            @if (product.imageUrl) {
+            <img [src]="product.imageUrl" [alt]="product.name" class="w-full h-full object-cover" />
+            } @else {
+            <div class="w-full h-full flex items-center justify-center bg-gray-100 dark:bg-gray-700">
+                <i class="fa-solid fa-image text-6xl text-gray-300 dark:text-gray-500"></i>
+            </div>
+            }
+        </div>
+
+        <!-- Info -->
+        <div>
+            @if (product.categoryName) {
+            <span
+                class="inline-block px-3 py-1 text-xs font-medium rounded-full bg-brand-50 text-brand-500 dark:bg-brand-500/10 dark:text-brand-400 mb-3">
+                {{ product.categoryName }}
+            </span>
+            }
+
+            <h1 class="text-2xl lg:text-3xl font-bold text-gray-800 dark:text-white/90">
+                {{ product.name }}
+            </h1>
+
+            <div class="mt-4">
+                <span class="text-3xl font-bold text-brand-500">{{ product.price | currency:'USD' }}</span>
+            </div>
+
+            <!-- Stock Status -->
+            <div class="mt-4">
+                @if (product.stock === 0) {
+                <span
+                    class="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-full bg-error-50 text-error-600 dark:bg-error-500/10 dark:text-error-400">
+                    <i class="fa-solid fa-circle-xmark"></i> Out of Stock
+                </span>
+                } @else if (product.stock <= 5) { <span
+                    class="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-full bg-warning-50 text-warning-600 dark:bg-warning-500/10 dark:text-warning-400">
+                    <i class="fa-solid fa-triangle-exclamation"></i> Only {{ product.stock }} left
+                    </span>
+                    } @else {
+                    <span
+                        class="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-full bg-success-50 text-success-600 dark:bg-success-500/10 dark:text-success-400">
+                        <i class="fa-solid fa-circle-check"></i> In Stock ({{ product.stock }})
+                    </span>
+                    }
+            </div>
+
+            <!-- Description -->
+            <div class="mt-6">
+                <h3 class="text-sm font-semibold text-gray-800 dark:text-white/90 mb-2">Description</h3>
+                <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                    {{ product.description || 'No description available.' }}
+                </p>
+            </div>
+
+            <!-- Quantity & Add to Cart -->
+            @if (product.stock > 0) {
+            <div class="mt-8 flex flex-col sm:flex-row gap-4">
+                <!-- Quantity Selector -->
+                <div class="inline-flex items-center border border-gray-300 dark:border-gray-600 rounded-lg">
+                    <button (click)="decrementQty()" [disabled]="quantity <= 1"
+                        class="w-10 h-11 flex items-center justify-center text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-l-lg disabled:opacity-40 transition-colors">
+                        <i class="fa-solid fa-minus text-xs"></i>
+                    </button>
+                    <span
+                        class="w-14 h-11 flex items-center justify-center text-sm font-medium text-gray-800 dark:text-white/90 border-x border-gray-300 dark:border-gray-600">
+                        {{ quantity }}
+                    </span>
+                    <button (click)="incrementQty()" [disabled]="quantity >= product.stock"
+                        class="w-10 h-11 flex items-center justify-center text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-r-lg disabled:opacity-40 transition-colors">
+                        <i class="fa-solid fa-plus text-xs"></i>
+                    </button>
+                </div>
+
+                <!-- Add to Cart -->
+                <button (click)="addToCart()"
+                    class="inline-flex items-center justify-center gap-2 h-11 px-8 text-sm font-medium text-white bg-brand-500 hover:bg-brand-600 rounded-lg transition-colors">
+                    <i class="fa-solid fa-cart-plus"></i> Add to Cart
+                </button>
+            </div>
+            }
+        </div>
+    </div>
+    }
+</div>

@@ -1,0 +1,96 @@
+@if (open) {
+<!-- Backdrop -->
+<div class="fixed inset-0 z-[999] bg-black/50" (click)="close()"></div>
+
+<!-- Dialog -->
+<div class="fixed inset-0 z-[1000] flex items-center justify-center p-4">
+    <div class="w-full max-w-lg rounded-xl bg-white shadow-xl dark:bg-gray-800" (click)="$event.stopPropagation()">
+        <!-- Header -->
+        <div class="flex items-center justify-between border-b border-gray-200 px-6 py-4 dark:border-gray-700">
+            <h3 class="text-lg font-semibold text-gray-800 dark:text-white">
+                <i class="fa-solid fa-user-plus mr-2 text-brand-500"></i>Add New User
+            </h3>
+            <button (click)="close()" type="button"
+                class="rounded-full p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-700">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                </svg>
+            </button>
+        </div>
+
+        <!-- Body -->
+        <div class="px-6 py-4">
+            @if (errorMessage) {
+            <div class="mb-4 rounded-lg bg-red-50 p-3 text-sm text-red-600 dark:bg-red-900/30 dark:text-red-400">
+                <i class="fa-solid fa-circle-exclamation mr-1"></i>{{ errorMessage }}
+            </div>
+            }
+
+            <form [formGroup]="userForm" (ngSubmit)="submit()">
+                <div class="space-y-4">
+                    <!-- First Name -->
+                    <div>
+                        <label class="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">First
+                            Name</label>
+                        <input formControlName="firstName" type="text" placeholder="Enter first name"
+                            class="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm text-gray-700 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 dark:focus:border-brand-500" />
+                        @if (userForm.get('firstName')?.touched && userForm.get('firstName')?.errors) {
+                        <p class="mt-1 text-xs text-red-500">First name is required (min 2 characters)</p>
+                        }
+                    </div>
+                    <!-- Last Name -->
+                    <div>
+                        <label class="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">Last
+                            Name</label>
+                        <input formControlName="lastName" type="text" placeholder="Enter last name"
+                            class="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm text-gray-700 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 dark:focus:border-brand-500" />
+                        @if (userForm.get('lastName')?.touched && userForm.get('lastName')?.errors) {
+                        <p class="mt-1 text-xs text-red-500">Last name is required (min 2 characters)</p>
+                        }
+                    </div>
+                    <!-- Email -->
+                    <div>
+                        <label class="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">Email</label>
+                        <input formControlName="email" type="email" placeholder="Enter email address"
+                            class="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm text-gray-700 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 dark:focus:border-brand-500" />
+                        @if (userForm.get('email')?.touched && userForm.get('email')?.errors) {
+                        <p class="mt-1 text-xs text-red-500">A valid email is required</p>
+                        }
+                    </div>
+                    <!-- Password -->
+                    <div>
+                        <label class="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">Password</label>
+                        <input formControlName="password" type="password" placeholder="Enter password"
+                            class="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm text-gray-700 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 dark:focus:border-brand-500" />
+                        @if (userForm.get('password')?.touched && userForm.get('password')?.errors) {
+                        <p class="mt-1 text-xs text-red-500">Password is required (min 6 characters)</p>
+                        }
+                    </div>
+                    <!-- Role -->
+                    <div>
+                        <label class="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">Role</label>
+                        <select formControlName="role"
+                            class="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm text-gray-700 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 dark:focus:border-brand-500">
+                            @for (role of roles; track role.value) {
+                            <option [value]="role.value">{{ role.label }}</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Footer -->
+        <div class="flex justify-end gap-3 border-t border-gray-200 px-6 py-4 dark:border-gray-700">
+            <button (click)="close()" type="button"
+                class="rounded-lg bg-gray-200 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-300 dark:bg-gray-600 dark:text-gray-200 dark:hover:bg-gray-500">
+                Cancel
+            </button>
+            <button (click)="submit()" type="button" [disabled]="submitting"
+                class="rounded-lg bg-brand-500 px-4 py-2 text-sm font-medium text-white hover:bg-brand-600 disabled:opacity-50 disabled:cursor-not-allowed">
+                {{ submitting ? 'Creating...' : 'Create User' }}
+            </button>
+        </div>
+    </div>
+</div>
+}

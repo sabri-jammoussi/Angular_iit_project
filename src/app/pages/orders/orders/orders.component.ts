@@ -1,6 +1,6 @@
 import { CommonModule } from "@angular/common";
 import { HttpClientModule } from "@angular/common/http";
-import { Component, OnInit } from "@angular/core";
+import { Component, HostListener, OnInit } from "@angular/core";
 import { ComponentCardComponent } from "../../../shared/components/common/component-card/component-card.component";
 import { PageBreadcrumbComponent } from "../../../shared/components/common/page-breadcrumb/page-breadcrumb.component";
 import { BadgeComponent } from "../../../shared/components/ui/badge/badge.component";
@@ -32,6 +32,11 @@ export class OrdersComponent implements OnInit {
   dialogOpen = false;
   selectedOrderId: number | null = null;
   selectedOrderDetails: any[] = [];
+
+  // Status change state
+  openStatusMenuId: number | null = null;
+  updatingStatusId: number | null = null;
+  readonly statuses = ["Pending", "Processing", "Delivered", "Cancelled"];
 
   constructor(private orderService: OrderService) {}
 
@@ -81,5 +86,44 @@ export class OrdersComponent implements OnInit {
     this.dialogOpen = false;
     this.selectedOrderId = null;
     this.selectedOrderDetails = [];
+  }
+
+  @HostListener("document:click")
+  onDocumentClick(): void {
+    this.openStatusMenuId = null;
+  }
+
+  toggleStatusMenu(orderId: number, event: Event): void {
+    event.stopPropagation();
+    this.openStatusMenuId = this.openStatusMenuId === orderId ? null : orderId;
+  }
+
+  changeStatus(order: Order, status: string): void {
+    if (this.updatingStatusId === order.id) return;
+    this.openStatusMenuId = null;
+    this.updatingStatusId = order.id;
+    this.orderService.updateOrderStatus(order.id, status).subscribe({
+      next: () => {
+        order.status = status;
+        this.updatingStatusId = null;
+      },
+      error: (err) => {
+        console.error("Failed to update status", err);
+        this.updatingStatusId = null;
+      },
+    });
+  }
+
+  getStatusMenuColor(status: string): string {
+    switch (status.toLowerCase()) {
+      case "delivered":
+        return "text-green-600 hover:bg-green-50 dark:text-green-400 dark:hover:bg-green-900/20";
+      case "processing":
+        return "text-blue-600 hover:bg-blue-50 dark:text-blue-400 dark:hover:bg-blue-900/20";
+      case "cancelled":
+        return "text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20";
+      default:
+        return "text-yellow-600 hover:bg-yellow-50 dark:text-yellow-400 dark:hover:bg-yellow-900/20";
+    }
   }
 }

@@ -1,0 +1,100 @@
+<nav class="sticky top-0 z-50 bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16">
+            <!-- Logo -->
+            <a routerLink="/shop" class="flex items-center gap-2">
+                <span class="text-xl font-bold text-brand-500">
+                    <i class="fa-solid fa-store"></i> E-Shop
+                </span>
+            </a>
+
+            <!-- Desktop Nav -->
+            <div class="hidden md:flex items-center gap-6">
+                <a routerLink="/shop" routerLinkActive="text-brand-500" [routerLinkActiveOptions]="{exact: true}"
+                    class="text-sm font-medium text-gray-700 hover:text-brand-500 dark:text-gray-300 dark:hover:text-brand-400 transition-colors">
+                    <i class="fa-solid fa-house mr-1"></i> Home
+                </a>
+                <a routerLink="/shop/products" routerLinkActive="text-brand-500"
+                    class="text-sm font-medium text-gray-700 hover:text-brand-500 dark:text-gray-300 dark:hover:text-brand-400 transition-colors">
+                    <i class="fa-solid fa-box-open mr-1"></i> Products
+                </a>
+                @if (isLoggedIn) {
+                <a routerLink="/shop/orders" routerLinkActive="text-brand-500"
+                    class="text-sm font-medium text-gray-700 hover:text-brand-500 dark:text-gray-300 dark:hover:text-brand-400 transition-colors">
+                    <i class="fa-solid fa-clipboard-list mr-1"></i> My Orders
+                </a>
+                }
+            </div>
+
+            <!-- Right Section -->
+            <div class="flex items-center gap-4">
+                <!-- Cart -->
+                <a routerLink="/shop/cart"
+                    class="relative text-gray-700 hover:text-brand-500 dark:text-gray-300 dark:hover:text-brand-400 transition-colors">
+                    <i class="fa-solid fa-cart-shopping text-xl"></i>
+                    @if (cartCount > 0) {
+                    <span
+                        class="absolute -top-2 -right-2 inline-flex items-center justify-center w-5 h-5 text-[10px] font-bold text-white bg-error-500 rounded-full">
+                        {{ cartCount }}
+                    </span>
+                    }
+                </a>
+
+                <!-- User -->
+                @if (isLoggedIn) {
+                <div class="relative">
+                    <button (click)="toggleUserDropdown()"
+                        class="flex items-center gap-1 text-sm font-medium text-gray-700 hover:text-brand-500 dark:text-gray-300 dark:hover:text-brand-400 transition-colors">
+                        <i class="fa-solid fa-circle-user text-xl"></i>
+                        <i class="fa-solid fa-chevron-down text-xs"></i>
+                    </button>
+                    @if (userDropdownOpen) {
+                    <div
+                        class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-theme-lg border border-gray-200 dark:bg-gray-800 dark:border-gray-700 py-2 z-50">
+                        <a routerLink="/shop/orders" (click)="userDropdownOpen = false"
+                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700">
+                            <i class="fa-solid fa-clipboard-list mr-2"></i> My Orders
+                        </a>
+                        <hr class="my-1 border-gray-200 dark:border-gray-700">
+                        <button (click)="logout()"
+                            class="w-full text-left px-4 py-2 text-sm text-error-500 hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <i class="fa-solid fa-right-from-bracket mr-2"></i> Logout
+                        </button>
+                    </div>
+                    }
+                </div>
+                } @else {
+                <a routerLink="/shop/login"
+                    class="inline-flex items-center gap-2 text-sm font-medium text-white bg-brand-500 hover:bg-brand-600 rounded-lg px-4 py-2 transition-colors">
+                    <i class="fa-solid fa-right-to-bracket"></i> Sign In
+                </a>
+                }
+
+                <!-- Mobile menu button -->
+                <button (click)="toggleMobileMenu()" class="md:hidden text-gray-700 dark:text-gray-300">
+                    <i [ngClass]="mobileMenuOpen ? 'fa-solid fa-xmark text-xl' : 'fa-solid fa-bars text-xl'"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Nav -->
+        @if (mobileMenuOpen) {
+        <div class="md:hidden border-t border-gray-200 dark:border-gray-700 py-3 space-y-2">
+            <a routerLink="/shop" (click)="mobileMenuOpen = false"
+                class="block px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-lg dark:text-gray-300 dark:hover:bg-gray-700">
+                <i class="fa-solid fa-house mr-2"></i> Home
+            </a>
+            <a routerLink="/shop/products" (click)="mobileMenuOpen = false"
+                class="block px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-lg dark:text-gray-300 dark:hover:bg-gray-700">
+                <i class="fa-solid fa-box-open mr-2"></i> Products
+            </a>
+            @if (isLoggedIn) {
+            <a routerLink="/shop/orders" (click)="mobileMenuOpen = false"
+                class="block px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-lg dark:text-gray-300 dark:hover:bg-gray-700">
+                <i class="fa-solid fa-clipboard-list mr-2"></i> My Orders
+            </a>
+            }
+        </div>
+        }
+    </div>
+</nav>
