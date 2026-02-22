@@ -1,0 +1,88 @@
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Page Header -->
+    <div class="mb-8">
+        <h1 class="text-2xl font-bold text-gray-800 dark:text-white/90">Our Products</h1>
+        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Browse our collection of quality products</p>
+    </div>
+
+    <!-- Search -->
+    <div class="mb-6">
+        <div class="relative max-w-md">
+            <input [(ngModel)]="searchTerm" (keyup.enter)="onSearch()" type="text" placeholder="Search products..."
+                class="form-input h-11 w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 pl-11 pr-4 py-2.5 text-sm text-gray-800 dark:text-white/90 placeholder-gray-400 focus:border-brand-500 focus:ring-brand-500" />
+            <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+            <button (click)="onSearch()"
+                class="absolute right-2 top-1/2 -translate-y-1/2 text-sm text-brand-500 hover:text-brand-600 font-medium px-2">
+                Search
+            </button>
+        </div>
+    </div>
+
+    <!-- Loading -->
+    @if (loading) {
+    <div class="flex items-center justify-center py-20">
+        <i class="fa-solid fa-spinner fa-spin text-3xl text-brand-500"></i>
+    </div>
+    }
+
+    <!-- Empty state -->
+    @if (!loading && products.length === 0) {
+    <div class="text-center py-20">
+        <i class="fa-solid fa-box-open text-5xl text-gray-300 dark:text-gray-600 mb-4"></i>
+        <p class="text-lg text-gray-500 dark:text-gray-400">No products found</p>
+        @if (searchTerm) {
+        <button (click)="searchTerm = ''; onSearch()"
+            class="mt-3 text-sm text-brand-500 hover:text-brand-600 font-medium">
+            Clear search
+        </button>
+        }
+    </div>
+    }
+
+    <!-- Product Grid -->
+    @if (!loading && products.length > 0) {
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        @for (product of products; track product.id) {
+        <div
+            class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden shadow-theme-xs hover:shadow-theme-md transition-shadow group">
+            <!-- Image -->
+            <a [routerLink]="['/shop/products', product.id]"
+                class="block aspect-square overflow-hidden bg-gray-100 dark:bg-gray-700">
+                @if (product.imageUrl) {
+                <img [src]="product.imageUrl" [alt]="product.name"
+                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                } @else {
+                <div class="w-full h-full flex items-center justify-center">
+                    <i class="fa-solid fa-image text-4xl text-gray-300 dark:text-gray-500"></i>
+                </div>
+                }
+            </a>
+
+            <!-- Info -->
+            <div class="p-4">
+                <a [routerLink]="['/shop/products', product.id]"
+                    class="block text-sm font-semibold text-gray-800 dark:text-white/90 hover:text-brand-500 dark:hover:text-brand-400 truncate">
+                    {{ product.name }}
+                </a>
+                @if (product.categoryName) {
+                <p class="mt-1 text-xs text-gray-400 dark:text-gray-500">{{ product.categoryName }}</p>
+                }
+                <div class="mt-3 flex items-center justify-between">
+                    <span class="text-lg font-bold text-brand-500">{{ product.price | currency:'USD' }}</span>
+                    <button (click)="addToCart(product)" [disabled]="product.stock === 0"
+                        class="inline-flex items-center justify-center w-9 h-9 rounded-lg bg-brand-50 dark:bg-brand-500/10 text-brand-500 hover:bg-brand-500 hover:text-white transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                        [title]="product.stock === 0 ? 'Out of stock' : 'Add to cart'">
+                        <i class="fa-solid fa-cart-plus text-sm"></i>
+                    </button>
+                </div>
+                @if (product.stock === 0) {
+                <p class="mt-1 text-xs text-error-500 font-medium">Out of stock</p>
+                } @else if (product.stock <= 5) { <p class="mt-1 text-xs text-warning-500 font-medium">Only {{
+                    product.stock }} left</p>
+                    }
+            </div>
+        </div>
+        }
+    </div>
+    }
+</div>

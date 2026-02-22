@@ -1,0 +1,80 @@
+@if (open && user) {
+<!-- Backdrop -->
+<div class="fixed inset-0 z-[999] bg-black/50" (click)="close()"></div>
+
+<!-- Dialog -->
+<div class="fixed inset-0 z-[1000] flex items-center justify-center p-4">
+    <div class="w-full max-w-md rounded-xl bg-white shadow-xl dark:bg-gray-800" (click)="$event.stopPropagation()">
+        <!-- Header -->
+        <div class="flex items-center justify-between border-b border-gray-200 px-6 py-4 dark:border-gray-700">
+            <h3 class="text-lg font-semibold dark:text-white"
+                [ngClass]="user.isDisabled ? 'text-green-600 dark:text-green-400' : 'text-orange-600 dark:text-orange-400'">
+                <i class="fa-solid mr-2" [ngClass]="user.isDisabled ? 'fa-user-check' : 'fa-user-slash'"></i>
+                {{ user.isDisabled ? 'Enable' : 'Disable' }} Account
+            </h3>
+            <button (click)="close()" type="button"
+                class="rounded-full p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-700">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                </svg>
+            </button>
+        </div>
+
+        <!-- Body -->
+        <div class="px-6 py-6">
+            @if (errorMessage) {
+            <div class="mb-4 rounded-lg bg-red-50 p-3 text-sm text-red-600 dark:bg-red-900/30 dark:text-red-400">
+                <i class="fa-solid fa-circle-exclamation mr-1"></i>{{ errorMessage }}
+            </div>
+            }
+
+            <div class="text-center">
+                <div class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full"
+                    [ngClass]="user.isDisabled ? 'bg-green-100 dark:bg-green-900/30' : 'bg-orange-100 dark:bg-orange-900/30'">
+                    <i class="fa-solid text-2xl" [ngClass]="user.isDisabled
+                            ? 'fa-user-check text-green-600 dark:text-green-400'
+                            : 'fa-user-slash text-orange-600 dark:text-orange-400'"></i>
+                </div>
+                @if (user.isDisabled) {
+                <p class="text-sm text-gray-600 dark:text-gray-300">
+                    Are you sure you want to <strong class="text-green-600 dark:text-green-400">enable</strong> the
+                    account for
+                    <strong class="text-gray-800 dark:text-white">{{ user.firstName }} {{ user.lastName }}</strong>?
+                </p>
+                <p class="mt-2 text-xs text-gray-500 dark:text-gray-400">
+                    This user will be able to access the system again.
+                </p>
+                } @else {
+                <p class="text-sm text-gray-600 dark:text-gray-300">
+                    Are you sure you want to <strong class="text-orange-600 dark:text-orange-400">disable</strong> the
+                    account for
+                    <strong class="text-gray-800 dark:text-white">{{ user.firstName }} {{ user.lastName }}</strong>?
+                </p>
+                <p class="mt-2 text-xs text-gray-500 dark:text-gray-400">
+                    This user will no longer be able to access the system until the account is re-enabled.
+                </p>
+                }
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="flex justify-end gap-3 border-t border-gray-200 px-6 py-4 dark:border-gray-700">
+            <button (click)="close()" type="button"
+                class="rounded-lg bg-gray-200 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-300 dark:bg-gray-600 dark:text-gray-200 dark:hover:bg-gray-500">
+                Cancel
+            </button>
+            @if (user.isDisabled) {
+            <button (click)="confirm()" type="button" [disabled]="submitting"
+                class="rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed">
+                {{ submitting ? 'Enabling...' : 'Enable Account' }}
+            </button>
+            } @else {
+            <button (click)="confirm()" type="button" [disabled]="submitting"
+                class="rounded-lg bg-orange-600 px-4 py-2 text-sm font-medium text-white hover:bg-orange-700 disabled:opacity-50 disabled:cursor-not-allowed">
+                {{ submitting ? 'Disabling...' : 'Disable Account' }}
+            </button>
+            }
+        </div>
+    </div>
+</div>
+}

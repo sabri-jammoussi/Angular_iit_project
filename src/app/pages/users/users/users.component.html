@@ -1,0 +1,146 @@
+<app-page-breadcrumb pageTitle="Users" />
+<div class="space-y-6">
+    <div>
+        <app-component-card title="Users Management">
+            <!-- Add User Button -->
+            <div class="flex justify-end mb-4">
+                <button (click)="openAddDialog()" type="button"
+                    class="inline-flex items-center gap-2 rounded-lg bg-brand-500 px-4 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-brand-600 transition-colors">
+                    <i class="fa-solid fa-plus"></i>
+                    Add User
+                </button>
+            </div>
+
+            @if (loading) {
+            <div class="px-5 py-8 text-center text-gray-500 dark:text-gray-400">Loading users...</div>
+            } @else if (error) {
+            <div class="px-5 py-8 text-center text-red-500">{{ error }}</div>
+            } @else {
+
+            <div
+                class="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
+                <div class="max-w-full overflow-x-auto">
+                    <table class="min-w-full">
+                        <!-- Table Header -->
+                        <thead class="border-b border-gray-100 dark:border-white/[0.05]">
+                            <tr>
+                                <th
+                                    class="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
+                                    #</th>
+                                <th
+                                    class="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
+                                    First Name</th>
+                                <th
+                                    class="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
+                                    Last Name</th>
+                                <th
+                                    class="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
+                                    Email</th>
+                                <th
+                                    class="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
+                                    Role</th>
+                                <th
+                                    class="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
+                                    Status</th>
+                                <th
+                                    class="px-5 py-3 font-medium text-gray-500 text-center text-theme-xs dark:text-gray-400">
+                                    Actions</th>
+                            </tr>
+                        </thead>
+                        <!-- Table Body -->
+                        <tbody class="divide-y divide-gray-100 dark:divide-white/[0.05]">
+                            @for (user of users; track user.id) {
+                            <tr>
+                                <td class="px-5 py-4 text-start">
+                                    <span class="text-gray-500 text-theme-sm dark:text-gray-400">{{ user.id }}</span>
+                                </td>
+                                <td class="px-5 py-4 text-start">
+                                    <span class="block font-medium text-gray-800 text-theme-sm dark:text-white/90">
+                                        {{ user.firstName }}
+                                    </span>
+                                </td>
+                                <td class="px-5 py-4 text-start">
+                                    <span class="block font-medium text-gray-800 text-theme-sm dark:text-white/90">
+                                        {{ user.lastName }}
+                                    </span>
+                                </td>
+                                <td class="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                                    {{ user.email }}
+                                </td>
+                                <td class="px-4 py-3 text-start">
+                                    <app-badge size="sm" [color]="getRoleBadgeColor(user.role)">
+                                        {{ getRoleName(user.role) }}
+                                    </app-badge>
+                                </td>
+                                <td class="px-4 py-3 text-start">
+                                    <app-badge size="sm" [color]="getStatusBadgeColor(user.isDisabled)">
+                                        {{ user.isDisabled ? 'Disabled' : 'Active' }}
+                                    </app-badge>
+                                </td>
+                                <td class="px-4 py-3 text-center">
+                                    <div class="inline-flex items-center gap-1.5">
+                                        <!-- Edit -->
+                                        <button type="button" (click)="openEditDialog(user)" title="Edit user"
+                                            class="inline-flex items-center justify-center w-8 h-8 rounded-full text-blue-600 bg-blue-50 hover:bg-blue-100 dark:text-blue-400 dark:bg-blue-900/30 dark:hover:bg-blue-900/50 transition-colors">
+                                            <i class="fa-solid fa-pen-to-square text-sm"></i>
+                                        </button>
+                                        <!-- Disable/Enable -->
+                                        <button type="button" (click)="openDisableDialog(user)"
+                                            [title]="user.isDisabled ? 'Enable account' : 'Disable account'"
+                                            class="inline-flex items-center justify-center w-8 h-8 rounded-full transition-colors"
+                                            [ngClass]="user.isDisabled
+                                                ? 'text-green-600 bg-green-50 hover:bg-green-100 dark:text-green-400 dark:bg-green-900/30 dark:hover:bg-green-900/50'
+                                                : 'text-orange-600 bg-orange-50 hover:bg-orange-100 dark:text-orange-400 dark:bg-orange-900/30 dark:hover:bg-orange-900/50'">
+                                            <i class="fa-solid"
+                                                [ngClass]="user.isDisabled ? 'fa-toggle-on' : 'fa-toggle-off'"
+                                                style="font-size: 14px;"></i>
+                                        </button>
+                                        <!-- Reset Password -->
+                                        <button type="button" (click)="openResetPasswordDialog(user)"
+                                            title="Reset password"
+                                            class="inline-flex items-center justify-center w-8 h-8 rounded-full text-purple-600 bg-purple-50 hover:bg-purple-100 dark:text-purple-400 dark:bg-purple-900/30 dark:hover:bg-purple-900/50 transition-colors">
+                                            <i class="fa-solid fa-key text-sm"></i>
+                                        </button>
+                                        <!-- Delete -->
+                                        <button type="button" (click)="openDeleteDialog(user)" title="Delete user"
+                                            class="inline-flex items-center justify-center w-8 h-8 rounded-full text-red-600 bg-red-50 hover:bg-red-100 dark:text-red-400 dark:bg-red-900/30 dark:hover:bg-red-900/50 transition-colors">
+                                            <i class="fa-solid fa-trash text-sm"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            }
+
+        </app-component-card>
+    </div>
+</div>
+
+<!-- Add User Dialog -->
+<app-add-user-dialog [open]="addDialogOpen" (closed)="closeAddDialog()" (userAdded)="onUserAdded()">
+</app-add-user-dialog>
+
+<!-- Edit User Dialog -->
+<app-edit-user-dialog [open]="editDialogOpen" [user]="selectedUser" (closed)="closeEditDialog()"
+    (userEdited)="onUserEdited()">
+</app-edit-user-dialog>
+
+<!-- Delete User Dialog -->
+<app-delete-user-dialog [open]="deleteDialogOpen" [user]="selectedUser" (closed)="closeDeleteDialog()"
+    (userDeleted)="onUserDeleted()">
+</app-delete-user-dialog>
+
+<!-- Disable User Dialog -->
+<app-disable-user-dialog [open]="disableDialogOpen" [user]="selectedUser" (closed)="closeDisableDialog()"
+    (userToggled)="onUserDisableToggled()">
+</app-disable-user-dialog>
+
+<!-- Reset Password Dialog -->
+<app-reset-password-dialog [open]="resetPasswordDialogOpen" [user]="selectedUser" (closed)="closeResetPasswordDialog()"
+    (passwordReset)="onPasswordReset()">
+</app-reset-password-dialog>

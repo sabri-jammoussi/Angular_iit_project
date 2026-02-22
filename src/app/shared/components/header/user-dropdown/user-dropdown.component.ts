@@ -1,6 +1,7 @@
 import { CommonModule } from "@angular/common";
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { Router, RouterModule } from "@angular/router";
+import { JwtTokenService } from "../../../services/auth/jwt-token.service";
 import { DropdownItemTwoComponent } from "../../ui/dropdown/dropdown-item/dropdown-item.component-two";
 import { DropdownComponent } from "../../ui/dropdown/dropdown.component";
 
@@ -14,10 +15,30 @@ import { DropdownComponent } from "../../ui/dropdown/dropdown.component";
     DropdownItemTwoComponent,
   ],
 })
-export class UserDropdownComponent {
+export class UserDropdownComponent implements OnInit {
   isOpen = false;
+  displayName: string = "User";
+  fullName: string = "User";
+  email: string = "";
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private jwtTokenService: JwtTokenService,
+  ) {}
+
+  ngOnInit(): void {
+    this.loadUserFromToken();
+  }
+
+  private loadUserFromToken() {
+    try {
+      this.displayName = this.jwtTokenService.getUserName();
+      this.fullName = this.jwtTokenService.getUserFullName();
+      this.email = this.jwtTokenService.getUserEmail();
+    } catch (e) {
+      // ignore decode errors and keep defaults
+    }
+  }
 
   toggleDropdown() {
     this.isOpen = !this.isOpen;

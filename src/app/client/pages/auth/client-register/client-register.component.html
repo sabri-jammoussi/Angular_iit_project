@@ -1,0 +1,100 @@
+<div class="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 px-4 py-12">
+    <div class="w-full max-w-md">
+        <!-- Logo -->
+        <div class="text-center mb-8">
+            <a routerLink="/shop" class="inline-block">
+                <span class="text-3xl font-bold text-brand-500">
+                    <i class="fa-solid fa-store"></i> E-Shop
+                </span>
+            </a>
+            <h1 class="mt-4 text-2xl font-semibold text-gray-800 dark:text-white/90">Create an Account</h1>
+            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Fill in the details to get started</p>
+        </div>
+
+        <!-- Card -->
+        <div
+            class="bg-white dark:bg-gray-800 rounded-xl shadow-theme-sm border border-gray-200 dark:border-gray-700 p-6 sm:p-8">
+            <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="space-y-5">
+                <!-- Name Row -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                            First Name <span class="text-error-500">*</span>
+                        </label>
+                        <input formControlName="firstName" type="text" placeholder="John"
+                            class="form-input h-11 w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-transparent px-4 py-2.5 text-sm text-gray-800 dark:text-white/90 placeholder-gray-400 focus:border-brand-500 focus:ring-brand-500 dark:bg-gray-800" />
+                        @if (registerForm.get('firstName')?.touched &&
+                        registerForm.get('firstName')?.hasError('required')) {
+                        <p class="mt-1 text-xs text-error-500">First name is required</p>
+                        }
+                    </div>
+                    <div>
+                        <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                            Last Name <span class="text-error-500">*</span>
+                        </label>
+                        <input formControlName="lastName" type="text" placeholder="Doe"
+                            class="form-input h-11 w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-transparent px-4 py-2.5 text-sm text-gray-800 dark:text-white/90 placeholder-gray-400 focus:border-brand-500 focus:ring-brand-500 dark:bg-gray-800" />
+                        @if (registerForm.get('lastName')?.touched &&
+                        registerForm.get('lastName')?.hasError('required')) {
+                        <p class="mt-1 text-xs text-error-500">Last name is required</p>
+                        }
+                    </div>
+                </div>
+
+                <!-- Email -->
+                <div>
+                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                        Email <span class="text-error-500">*</span>
+                    </label>
+                    <input formControlName="email" type="email" placeholder="you@example.com"
+                        class="form-input h-11 w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-transparent px-4 py-2.5 text-sm text-gray-800 dark:text-white/90 placeholder-gray-400 focus:border-brand-500 focus:ring-brand-500 dark:bg-gray-800" />
+                    @if (registerForm.get('email')?.touched && registerForm.get('email')?.hasError('required')) {
+                    <p class="mt-1 text-xs text-error-500">Email is required</p>
+                    }
+                    @if (registerForm.get('email')?.touched && registerForm.get('email')?.hasError('email')) {
+                    <p class="mt-1 text-xs text-error-500">Enter a valid email address</p>
+                    }
+                </div>
+
+                <!-- Password -->
+                <div>
+                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                        Password <span class="text-error-500">*</span>
+                    </label>
+                    <div class="relative">
+                        <input formControlName="password" [type]="showPassword ? 'text' : 'password'"
+                            placeholder="Min 6 characters"
+                            class="form-input h-11 w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-transparent px-4 py-2.5 text-sm text-gray-800 dark:text-white/90 placeholder-gray-400 focus:border-brand-500 focus:ring-brand-500 dark:bg-gray-800 pr-12" />
+                        <button type="button" (click)="togglePasswordVisibility()"
+                            class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
+                            <i class="fa-solid" [ngClass]="showPassword ? 'fa-eye' : 'fa-eye-slash'"></i>
+                        </button>
+                    </div>
+                    @if (registerForm.get('password')?.touched && registerForm.get('password')?.hasError('required')) {
+                    <p class="mt-1 text-xs text-error-500">Password is required</p>
+                    }
+                    @if (registerForm.get('password')?.touched && registerForm.get('password')?.hasError('minlength')) {
+                    <p class="mt-1 text-xs text-error-500">Password must be at least 6 characters</p>
+                    }
+                </div>
+
+                <!-- Submit -->
+                <button type="submit" [disabled]="loading"
+                    class="w-full inline-flex items-center justify-center gap-2 h-11 text-sm font-medium text-white bg-brand-500 hover:bg-brand-600 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                    @if (loading) {
+                    <i class="fa-solid fa-spinner fa-spin"></i>
+                    }
+                    Create Account
+                </button>
+            </form>
+
+            <div class="mt-5 text-center">
+                <p class="text-sm text-gray-500 dark:text-gray-400">
+                    Already have an account?
+                    <a routerLink="/shop/login"
+                        class="text-brand-500 hover:text-brand-600 dark:text-brand-400 font-medium">Sign In</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>

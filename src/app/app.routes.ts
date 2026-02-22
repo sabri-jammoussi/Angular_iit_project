@@ -1,4 +1,5 @@
 import { Routes } from "@angular/router";
+import { clientRoutes } from "./client/client.routes";
 import { SignInComponent } from "./pages/auth-pages/sign-in/sign-in.component";
 import { SignUpComponent } from "./pages/auth-pages/sign-up/sign-up.component";
 import { BlankComponent } from "./pages/blank/blank.component";
@@ -10,6 +11,7 @@ import { FormElementsComponent } from "./pages/forms/form-elements/form-elements
 import { InvoicesComponent } from "./pages/invoices/invoices.component";
 import { OrdersComponent } from "./pages/orders/orders/orders.component";
 import { NotFoundComponent } from "./pages/other-page/not-found/not-found.component";
+import { ProductsComponent } from "./pages/products/products/products.component";
 import { ProfileComponent } from "./pages/profile/profile.component";
 import { BasicTablesComponent } from "./pages/tables/basic-tables/basic-tables.component";
 import { AlertsComponent } from "./pages/ui-elements/alerts/alerts.component";
@@ -18,6 +20,7 @@ import { BadgesComponent } from "./pages/ui-elements/badges/badges.component";
 import { ButtonsComponent } from "./pages/ui-elements/buttons/buttons.component";
 import { ImagesComponent } from "./pages/ui-elements/images/images.component";
 import { VideosComponent } from "./pages/ui-elements/videos/videos.component";
+import { UsersComponent } from "./pages/users/users/users.component";
 import { AppLayoutComponent } from "./shared/layout/app-layout/app-layout.component";
 import { AuthGuard } from "./shared/services/auth/auth.guard";
 
@@ -62,6 +65,16 @@ export const routes: Routes = [
         path: "orders",
         component: OrdersComponent,
         title: "Orders | TailAdmin - Angular Admin Dashboard Template",
+      },
+      {
+        path: "users",
+        component: UsersComponent,
+        title: "Users | TailAdmin - Angular Admin Dashboard Template",
+      },
+      {
+        path: "products",
+        component: ProductsComponent,
+        title: "Products | TailAdmin - Angular Admin Dashboard Template",
       },
       {
         path: "blank",
@@ -138,6 +151,11 @@ export const routes: Routes = [
     component: SignUpComponent,
     title:
       "Angular Sign Up Dashboard | TailAdmin - Angular Admin Dashboard Template",
+  },
+  // client e-commerce app
+  {
+    path: "shop",
+    children: clientRoutes,
   },
   // error pages
   {
